@@ -43,26 +43,12 @@ function isInRange(date, schedule) {
 // time - the string of the current time - "10:00"
 function getClosestBackward(time, schedule) {
   var closestTime = null;
-  for (var time in schedule) {
+  for (var currTime in schedule) {
     if (closestTime === null) { // if this is the first iteration set time now
-      closestTime = time;
+      closestTime = currTime;
     }
-    else if (time > closestTime && closestTime < time) {
-      closestTime = time;
-    }
-  }
-  return closestTime;
-}
-
-// same as the function above but looks for the closest time forward
-function getClosestForward(time, schedule) {
-  var closestTime = null;
-  for (var time in schedule) {
-    if (closestTime === null) { // if this is the first iteration set time now
-      closestTime = time;
-    }
-    else if (time < closestTime && closestTime > time) {
-      closestTime = time;
+    else if (time > currTime && closestTime < currTime) {
+      closestTime = currTime;
     }
   }
   return closestTime;
@@ -154,12 +140,23 @@ function getNextChange(args) {
   var thisSchedule = schedule[dayNumToString(ret.getDay())]
 
   // find the current mentor
-  var currMentor = getMentorAt(ret, thisSchedule);
+  var currMentor = getMentorAt(ret, schedule);
 
   // look forward for when the next mentor change is
   currTime = dateToTimeString(ret);
-  var nextTime = getClosestForward(currTime, thisSchedule);
-  var splat = nextTime.split(":"); // splat = past tense of split
+
+  // closest mentor change defaults to the end of the day
+  var closestTime = schedule['hours']['end'];
+  for (var iTime in thisSchedule) {
+    var isAfter = currTime < iTime;
+    var diffMentor = !(currMentor === thisSchedule[iTime]);
+    var isCloser = closestTime > iTime;
+    if (isAfter && diffMentor && (closestTime === null || isCloser)) {
+      closestTime = iTime;
+    }
+  }
+
+  var splat = closestTime.split(":"); // splat = past tense of split
   ret.setHours(parseInt(splat[0]));
   ret.setMinutes(parseInt(splat[1]));
   return ret;
