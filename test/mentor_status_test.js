@@ -11,7 +11,7 @@ function getSchedule() {
 // get a day object with the day, hour, and minute properties given
 // day is 0 for sunday, 6 for saturday
 function getDate(day, hour, minute) {
-  var ret = new Date(2014, 1, 12, hour, minute, 0, 0);
+  var ret = new Date(2014, 0, 12, hour, minute, 0, 0);
   ret.setDate(ret.getDate()+day);
   return ret;
 }
@@ -19,7 +19,7 @@ function getDate(day, hour, minute) {
 describe('getMentorAt', function() {
   var schedule = getSchedule();
   it('should not have a mentor on the weekend', function() {
-    var weekend = getDate(1, 14, 20);
+    var weekend = getDate(0, 14, 20);
     var mentor = mentor_status.getMentorAt(weekend, schedule);
     assert.strictEqual(mentor, null, "Weekend mentor should be null");
   });

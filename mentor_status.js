@@ -47,7 +47,7 @@ function getClosestBackward(time, schedule) {
     if (closestTime === null) { // if this is the first iteration set time now
       closestTime = time;
     }
-    else if (thisTime > closestTime && closestTime < time) {
+    else if (time > closestTime && closestTime < time) {
       closestTime = time;
     }
   }
@@ -61,7 +61,7 @@ function getClosestForward(time, schedule) {
     if (closestTime === null) { // if this is the first iteration set time now
       closestTime = time;
     }
-    else if (thisTime < closestTime && closestTime > time) {
+    else if (time < closestTime && closestTime > time) {
       closestTime = time;
     }
   }
