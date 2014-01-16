@@ -46,7 +46,7 @@ function getClosestBackward(time, schedule) {
     if (closestTime === null) { // if this is the first iteration set time now
       closestTime = time;
     }
-    else if (thisTime > closestTime && closestTime < thisTime) {
+    else if (thisTime > closestTime && closestTime < time) {
       closestTime = time;
     }
   }
@@ -60,7 +60,7 @@ function getClosestForward(time, schedule) {
     if (closestTime === null) { // if this is the first iteration set time now
       closestTime = time;
     }
-    else if (thisTime > closestTime && closestTime < thisTime) {
+    else if (thisTime < closestTime && closestTime > time) {
       closestTime = time;
     }
   }
@@ -132,16 +132,17 @@ function getNextChange() {
     ret.setHours(0);
   }
 
+  var thisSchedule = schedule[dayNumToString(ret.getDay())]
+
   // find the current mentor
-  var currMentor = getMentorAt(
-    ret,
-    schedule[
-      dayNumToString(ret.getDay())
-    ]
-  );
+  var currMentor = getMentorAt(ret, thisSchedule);
 
   // look forward for when the next mentor change is
-  var closestForward = null;
-  for (var time in )
+  currTime = dateToTimeString(ret);
+  var nextTime = getClosestForward(currTime, thisSchedule);
+  var splat = nextTime.split(":"); // splat = past tense of split
+  ret.setHours(parseInt(splat[0]));
+  ret.setMinutes(parseInt(splat[1]));
+  return ret;
 }
 module.exports.getNextChange = getNextChange;
