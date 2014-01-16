@@ -1,0 +1,14 @@
+{
+	"version" : "0.0.1",
+	"name" : "mentorApp",
+	"displayName" : "Mentor On Duty App",
+	"description" : "Supplies information on which mentor is on duty",
+	"instanceId" : "mentor1",
+	"capabilities" : {
+		"mentor" : "0.0.1"
+	},
+	"API" : "0",
+	"dependencies" : {
+		"tts" : "0.1"
+	}
+}
