@@ -5,6 +5,7 @@ var fs = require('fs');
 // returns the parsed json from schedule.json
 function getCurrentSchedule() {
   if (!fs.existsSync('schedule.json')) {
+    console.log("ERROR: no schedule.json found");
     return null;
   }
   return JSON.parse(
@@ -77,7 +78,7 @@ function dayNumToString(day) {
     'Friday',
     'Saturday'
   ];
-  return day;
+  return days[day];
 }
 
 // ----------- Exposed Functions -------------
@@ -90,23 +91,41 @@ module.exports.getCurrentMentor = getCurrentMentor;
 
 // get the name of the current mentor at the given date, or null if out of range
 function getMentorAt(date, schedule) {
-  if (typeof(schedule) === 'undefined')
+  if (typeof(schedule) === 'undefined') {
     schedule = getCurrentSchedule();
-  if (!isInRange(schedule)) {
+  }
+  if (!isInRange(date, schedule)) {
     return null;
   }
+
   var thisSchedule = schedule[dayNumToString(date.getDay())];
   var thisTime = dateToTimeString(date);
 
   var closestTime = getClosestBackward(thisTime, thisSchedule);
+
   return thisSchedule[closestTime];
 }
 module.exports.getMentorAt = getMentorAt;
 
-function getNextChange() {
-  var date = new Date();
-  var ret = new Date();
-  var schedule = getCurrentSchedule();
+// args (optional):
+// {
+//   "date" : Date(),
+//   "schedule" : {...}
+// }
+function getNextChange(args) {
+  var date = null;
+  var ret = null;
+  var schedule = null;
+  if (typeof(args) === 'undefined') {
+    date = new Date();
+    ret = new Date();
+    schedule = getCurrentSchedule();
+  }
+  else {
+    date = args['date'];
+    ret = new Date(date.getTime());
+    schedule = args['schedule'];
+  }
 
   // adjust forward to Monday for the weekend
   if (date.getDay() === 0) { // it's sunday, add a day to ret to make it monday
