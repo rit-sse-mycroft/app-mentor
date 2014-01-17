@@ -9,6 +9,6 @@
 	},
 	"API" : "0",
 	"dependencies" : {
-		"tts" : "0.1"
+		"tts" : "0.0.1"
 	}
 }
